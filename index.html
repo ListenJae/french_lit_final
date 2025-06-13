@@ -68,10 +68,10 @@
 </head>
 <body>
 <div class="buttons">
+  <button onclick="handleButtonClick(3)">어린 왕자</button>
+  <button onclick="handleButtonClick(2)">자기 앞의 생</button>
   <button onclick="handleButtonClick(0)">이방인</button>
   <button onclick="handleButtonClick(1)">고도</button>
-  <button onclick="handleButtonClick(2)">자기 앞의 생</button>
-  <button onclick="handleButtonClick(3)">어린 왕자</button>
 </div>
 <button class="toggle-lang" onclick="toggleLanguage()">언어 전환</button>
 <script>
@@ -219,7 +219,6 @@ let translations = [
     "네가 우물을 찾았듯, 나도 내 길을 찾아야 해."
   ]
 ];
-
 let currentQuoteIndex = 0;
 let displayedText = "";
 let textProgress = 0;
