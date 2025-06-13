@@ -396,11 +396,11 @@ function addMomoText(x, y) {
 
 function drawMomoTexts() {
   textFont("Patrick Hand");
-  textSize(16);
+  textSize(20);
   for (let i = momoTexts.length - 1; i >= 0; i--) {
     let t = momoTexts[i];
-    fill(255, t.alpha);
-    textAlign(CENTER, CENTER);
+    fill(0, t.alpha); // 검정색으로 테스트
+    textAlign(LEFT, TOP);
     text(t.text, t.x, t.y);
     t.alpha -= 1;
     if (t.alpha <= 0) momoTexts.splice(i, 1);
