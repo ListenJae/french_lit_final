@@ -48,7 +48,9 @@ let messages = [
 ];
 let bgColors = ["#c0c0c0", "#f2f2f2", "#ffeedb", "#d1e8e2"];
 let starX = [], starY = [], starAlpha = [];
-let sounds = [];
+let clickStars = [];
+let bulletHoles = [];
+let sounds = [], gunshot;
 
 function preload() {
   soundFormats('mp3');
@@ -56,6 +58,7 @@ function preload() {
   sounds[1] = loadSound('waiting.mp3');
   sounds[2] = loadSound('momo.mp3');
   sounds[3] = loadSound('prince.mp3');
+  gunshot = loadSound('gunshot.mp3'); // 총소리 추가
 }
 
 function setup() {
@@ -77,6 +80,11 @@ function draw() {
 
   if (mode === 3) {
     drawStars();
+    drawClickStars();
+  }
+
+  if (mode === 0) {
+    drawBulletHoles();
   }
 
   fill(30);
@@ -97,6 +105,37 @@ function drawStars() {
   }
 }
 
+function drawClickStars() {
+  for (let s of clickStars) {
+    fill(255, 255, 0, 200);
+    star(s.x, s.y, 5, 12, 5);
+  }
+}
+
+function drawBulletHoles() {
+  for (let b of bulletHoles) {
+    fill(50);
+    circle(b.x, b.y, 15);
+    fill(0);
+    circle(b.x, b.y, 6);
+  }
+}
+
+function star(x, y, radius1, radius2, npoints) {
+  let angle = TWO_PI / npoints;
+  let halfAngle = angle / 2.0;
+  beginShape();
+  for (let a = 0; a < TWO_PI; a += angle) {
+    let sx = x + cos(a) * radius2;
+    let sy = y + sin(a) * radius2;
+    vertex(sx, sy);
+    sx = x + cos(a + halfAngle) * radius1;
+    sy = y + sin(a + halfAngle) * radius1;
+    vertex(sx, sy);
+  }
+  endShape(CLOSE);
+}
+
 function stopAllSounds() {
   for (let s of sounds) {
     if (s && s.isPlaying()) s.stop();
@@ -108,6 +147,15 @@ function changeMode(index) {
   mode = index;
   if (sounds[mode]) {
     sounds[mode].loop();
+  }
+}
+
+function mousePressed() {
+  if (mode === 0) {
+    bulletHoles.push({ x: mouseX, y: mouseY });
+    if (gunshot) gunshot.play();
+  } else if (mode === 3) {
+    clickStars.push({ x: mouseX, y: mouseY });
   }
 }
 </script>
