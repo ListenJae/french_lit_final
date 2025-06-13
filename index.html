@@ -346,7 +346,7 @@ function toggleLanguage() {
 }
 
 function mousePressed() {
-  if (mouseY < 70) return;
+  if (mouseY < 70 || (mouseX > width - 140 && mouseY > height - 60)) return;
   if (mode === 0) {
     bulletHoles.push({ x: mouseX, y: mouseY });
     if (gunshot) gunshot.play();
