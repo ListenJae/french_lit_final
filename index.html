@@ -234,7 +234,6 @@ let bgColors = ["#c0c0c0", "#f2f2f2", "#ffeedb", "#d1e8e2"];
 let starX = [], starY = [], starAlpha = [];
 let clickStars = [];
 let bulletHoles = [];
-let momoNotes = [];
 let sounds = [], gunshot;
 
 function preload() {
@@ -271,8 +270,7 @@ function setup() {
 }
 
 function draw() {
-  if (mode === 2) drawMomoNotes();
-  document.getElementById("descBox").style.display = showDescription ? "block" : "none";
+    document.getElementById("descBox").style.display = showDescription ? "block" : "none";
 
   if (introShown) {
     background(0);
@@ -380,54 +378,6 @@ function stopAllSounds() {
   if (gunshot && gunshot.isPlaying()) gunshot.stop();
 }
   
-function drawMomoNotes() {
-  textFont("Patrick Hand");
-  textSize(14);
-  for (let i = momoNotes.length - 1; i >= 0; i--) {
-    let note = momoNotes[i];
-    let w = textWidth(note.text) + 20;
-    let h = 40;
-    fill(255, 255, 153, note.alpha); // light yellow like Post-it
-    rect(note.x - 10, note.y - 20, w, h, 5);
-    fill(50, note.alpha);
-    textAlign(LEFT, TOP);
-    text(note.text, note.x, note.y - 10);
-    note.alpha -= 1;
-    if (note.alpha <= 0) momoNotes.splice(i, 1);
-  }
-}
-
-function addMomoNote() {
-  const texts = [
-    "Madame Rosa était tout pour moi.",
-    "Je ne savais pas comment me sentir.",
-    "L’amour, c’est compliqué et douloureux.",
-    "Je voulais juste être aimé.",
-    "Les adultes ne m’écoutaient jamais.",
-    "Je vivais dans un monde que je ne comprenais pas.",
-    "Il y avait toujours de la peur dans mon cœur.",
-    "Je me cachais derrière mes pensées.",
-    "La mort faisait partie de notre vie.",
-    "C’était difficile de croire en l’avenir.",
-    "Je ne connaissais pas mon père.",
-    "Madame Rosa avait toujours mal, mais elle souriait.",
-    "J’ai grandi dans le silence et la pauvreté.",
-    "On ne choisit pas de naître.",
-    "Je voulais comprendre les choses.",
-    "Tout le monde mentait, un peu.",
-    "Même les enfants peuvent souffrir profondément.",
-    "J’ai appris à aimer sans comprendre.",
-    "Elle me regardait comme si j’existais vraiment.",
-    "J’avais des pensées que je ne pouvais pas dire."
-  ];
-  momoNotes.push({
-    x: random(100, width - 100),
-    y: random(100, height - 100),
-    text: random(texts),
-    alpha: 255
-  });
-}
-
 function handleButtonClick(index) {
   changeMode(index);
 }
@@ -450,8 +400,7 @@ function toggleLanguage() {
 }
 
 function mousePressed() {
-  if (mode === 2) addMomoNote();
-  if (introShown) {
+    if (introShown) {
     introShown = false;
     updateQuote();
     return;
