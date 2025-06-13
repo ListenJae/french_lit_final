@@ -5,8 +5,9 @@
   <title>Click to Nowhere</title>
   <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/addons/p5.sound.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime&family=Nanum+Myeongjo&family=Patrick+Hand&display=swap" rel="stylesheet">
   <style>
-    body { margin: 0; font-family: 'Georgia', serif; background: #000; color: white; }
+    body { margin: 0; background: #000; color: white; }
     canvas { display: block; }
     .buttons {
       position: fixed;
@@ -33,13 +34,14 @@
 </head>
 <body>
 <div class="buttons">
-  <button onclick="changeMode(0)">이방인</button>
-  <button onclick="changeMode(1)">고도</button>
-  <button onclick="changeMode(2)">자기 앞의 생</button>
-  <button onclick="changeMode(3)">어린 왕자</button>
+  <button onclick="handleButtonClick(0)">이방인</button>
+  <button onclick="handleButtonClick(1)">고도</button>
+  <button onclick="handleButtonClick(2)">자기 앞의 생</button>
+  <button onclick="handleButtonClick(3)">어린 왕자</button>
 </div>
 <script>
 let mode = 0;
+let fonts = ["Courier Prime", "Special Elite", "Nanum Myeongjo", "Patrick Hand"];
 let quotes = [[
     "나는 어머니가 죽었다는 소식을 들었다.",
     "나는 태양 때문에 쏘았다.",
@@ -109,18 +111,20 @@ let quotes = [[
     "어린 왕자는 지구에서 많은 걸 배웠어.",
     "네가 우물을 찾았듯, 나도 내 길을 찾아야 해."
   ]
-]; // 기존 20개 인용문 데이터 유지
+];
 let currentQuoteIndex = 0;
 let displayedText = "";
 let textProgress = 0;
 let lastTypedTime = 0;
 let typingSpeed = 40;
+let textStartTime = 0;
+let requiredDelay = 5000;
 
 let bgColors = ["#c0c0c0", "#f2f2f2", "#ffeedb", "#d1e8e2"];
 let starX = [], starY = [], starAlpha = [];
 let clickStars = [];
 let bulletHoles = [];
-let sounds = [], gunshot;
+let sounds = [], gunshot, typeSound;
 
 function preload() {
   soundFormats('mp3');
@@ -129,6 +133,7 @@ function preload() {
   sounds[2] = loadSound('momo.mp3');
   sounds[3] = loadSound('prince.mp3');
   gunshot = loadSound('gunshot.mp3');
+  typeSound = loadSound('type.mp3');
 }
 
 function setup() {
@@ -137,6 +142,7 @@ function setup() {
   textSize(28);
   fill(30);
   noStroke();
+  textFont(fonts[mode]);
 
   for (let i = 0; i < 100; i++) {
     starX.push(random(width));
@@ -159,11 +165,13 @@ function draw() {
   }
 
   fill(30);
+  textFont(fonts[mode]);
   let now = millis();
   if (textProgress < quotes[mode][currentQuoteIndex].length && now - lastTypedTime > typingSpeed) {
     textProgress++;
     lastTypedTime = now;
     displayedText = quotes[mode][currentQuoteIndex].substring(0, textProgress);
+    if (typeSound && !typeSound.isPlaying()) typeSound.play();
   }
   text(displayedText, width / 2, height / 2);
 
@@ -177,6 +185,7 @@ function updateQuote() {
   textProgress = 0;
   displayedText = "";
   lastTypedTime = millis();
+  textStartTime = millis();
 }
 
 function drawStars() {
@@ -234,18 +243,25 @@ function stopAllSounds() {
   }
 }
 
+function handleButtonClick(index) {
+  changeMode(index);
+}
+
 function changeMode(index) {
   stopAllSounds();
   mode = index;
   currentQuoteIndex = 0;
   updateQuote();
+  textFont(fonts[mode]);
   if (sounds[mode]) {
-    sounds[mode].setVolume(1.0); // 볼륨 최대로 설정
+    sounds[mode].setVolume(1.0);
     sounds[mode].loop();
   }
 }
 
 function mousePressed() {
+  if (mouseY < 70) return;
+
   if (mode === 0) {
     bulletHoles.push({ x: mouseX, y: mouseY });
     if (gunshot) gunshot.play();
@@ -253,7 +269,7 @@ function mousePressed() {
     clickStars.push({ x: mouseX, y: mouseY, alpha: 255 });
   }
 
-  if (mode !== 1 && textProgress >= quotes[mode][currentQuoteIndex].length) {
+  if (mode !== 1 && textProgress >= quotes[mode][currentQuoteIndex].length && millis() - textStartTime > 5000) {
     currentQuoteIndex = (currentQuoteIndex + 1) % quotes[mode].length;
     updateQuote();
   }
