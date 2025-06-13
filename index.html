@@ -219,7 +219,6 @@ let translations = [
     "네가 우물을 찾았듯, 나도 내 길을 찾아야 해."
   ]
 ];
-
 let currentQuoteIndex = 0;
 let displayedText = "";
 let textProgress = 0;
@@ -292,6 +291,7 @@ function draw() {
     updateClickStars();
   }
   if (mode === 0) drawBulletHoles();
+  if (mode === 2) drawMomoTexts();
 
   fill(30);
   textFont(fonts[mode]);
@@ -377,6 +377,34 @@ function stopAllSounds() {
   for (let s of sounds) if (s && s.isPlaying()) s.stop();
   if (gunshot && gunshot.isPlaying()) gunshot.stop();
 }
+
+let momoTexts = [];
+
+function addMomoText(x, y) {
+  const texts = [
+    "Madame Rosa était tout pour moi.",
+    "Je voulais juste être aimé.",
+    "Les adultes ne m’écoutaient jamais.",
+    "Je vivais dans un monde que je ne comprenais pas.",
+    "J’ai grandi dans le silence et la pauvreté.",
+    "Même les enfants peuvent souffrir profondément.",
+    "Elle me regardait comme si j’existais vraiment."
+  ];
+  momoTexts.push({ x, y, text: random(texts), alpha: 255 });
+}
+
+function drawMomoTexts() {
+  textFont("Patrick Hand");
+  textSize(16);
+  for (let i = momoTexts.length - 1; i >= 0; i--) {
+    let t = momoTexts[i];
+    fill(255, t.alpha);
+    textAlign(CENTER, CENTER);
+    text(t.text, t.x, t.y);
+    t.alpha -= 1;
+    if (t.alpha <= 0) momoTexts.splice(i, 1);
+  }
+}
   
 function handleButtonClick(index) {
   changeMode(index);
@@ -400,6 +428,7 @@ function toggleLanguage() {
 }
 
 function mousePressed() {
+  if (mode === 2) addMomoText(mouseX, mouseY);
     if (introShown) {
     introShown = false;
     updateQuote();
