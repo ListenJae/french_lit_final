@@ -191,6 +191,7 @@ let translations = [
     "네가 우물을 찾았듯, 나도 내 길을 찾아야 해."
   ]
 ];
+
 let currentQuoteIndex = 0;
 let displayedText = "";
 let textProgress = 0;
@@ -249,11 +250,7 @@ function draw() {
     textProgress++;
     lastTypedTime = now;
     displayedText = quotes[mode][currentQuoteIndex].substring(0, textProgress);
-    if (typeSound) {
-  if (!typeSound.isPlaying()) typeSound.play();
-} else if (typeSound && typeSound.isPlaying()) {
-  typeSound.stop();
-}
+    if (typeSound && !typeSound.isPlaying()) typeSound.setVolume(1.0); typeSound.play();
   }
 
   textSize(36);
