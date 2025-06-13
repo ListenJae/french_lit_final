@@ -108,7 +108,8 @@ let quotes = [[
     "진짜 아름다움은 눈에 보이지 않아.",
     "어린 왕자는 지구에서 많은 걸 배웠어.",
     "네가 우물을 찾았듯, 나도 내 길을 찾아야 해."
-  ]]; // 이전 코드에서 발췌문 20개씩 설정된 배열 그대로 유지
+  ]
+]; // 기존 20개 인용문 데이터 유지
 let currentQuoteIndex = 0;
 let displayedText = "";
 let textProgress = 0;
@@ -165,6 +166,11 @@ function draw() {
     displayedText = quotes[mode][currentQuoteIndex].substring(0, textProgress);
   }
   text(displayedText, width / 2, height / 2);
+
+  if (mode === 1) {
+    textSize(16);
+    text("…", width / 2, height / 2 + 40);
+  }
 }
 
 function updateQuote() {
@@ -234,6 +240,7 @@ function changeMode(index) {
   currentQuoteIndex = 0;
   updateQuote();
   if (sounds[mode]) {
+    sounds[mode].setVolume(1.0); // 볼륨 최대로 설정
     sounds[mode].loop();
   }
 }
@@ -246,7 +253,7 @@ function mousePressed() {
     clickStars.push({ x: mouseX, y: mouseY, alpha: 255 });
   }
 
-  if (mode !== 1) {
+  if (mode !== 1 && textProgress >= quotes[mode][currentQuoteIndex].length) {
     currentQuoteIndex = (currentQuoteIndex + 1) % quotes[mode].length;
     updateQuote();
   }
