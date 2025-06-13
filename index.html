@@ -218,6 +218,7 @@ function preload() {
   
 }
 
+let introShown = true;
 function setup() {
   createCanvas(windowWidth, windowHeight);
   textAlign(CENTER, CENTER);
@@ -234,6 +235,21 @@ function setup() {
 }
 
 function draw() {
+  if (introShown) {
+    background(0);
+    fill(255);
+    textAlign(CENTER, CENTER);
+    textFont('Nanum Myeongjo');
+    textSize(48);
+    text("Click to Nowhere", width / 2, height / 2 - 100);
+    textSize(20);
+    text("이 프로젝트는 프랑스 현대문학의 형식과 장르 실험을 주제로,
+네 작품(이방인, 고도를 기다리며, 자기 앞의 생, 어린 왕자)을
+감각적으로 체험할 수 있도록 구성된 인터랙티브 문학 작품입니다.", width / 2, height / 2 + 10);
+    textSize(14);
+    text("화면을 클릭하면 시작합니다.", width / 2, height / 2 + 150);
+    return;
+  }
   background(bgColors[mode]);
 
   if (mode === 3) {
@@ -350,6 +366,11 @@ function toggleLanguage() {
 }
 
 function mousePressed() {
+  if (introShown) {
+    introShown = false;
+    updateQuote();
+    return;
+  }
   if (mouseY < 70 || (mouseX > width - 140 && mouseY > height - 60)) return;
   if (mode === 0) {
     bulletHoles.push({ x: mouseX, y: mouseY });
