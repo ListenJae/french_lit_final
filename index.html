@@ -219,6 +219,7 @@ let translations = [
     "네가 우물을 찾았듯, 나도 내 길을 찾아야 해."
   ]
 ];
+
 let currentQuoteIndex = 0;
 let displayedText = "";
 let textProgress = 0;
@@ -428,6 +429,14 @@ function toggleLanguage() {
 }
 
 function mousePressed() {
+  if (introShown) {
+    introShown = false;
+    updateQuote();
+    return;
+  }
+
+  if (mouseY < 70 || (mouseX > width - 140 && mouseY > height - 60) || (mouseX < 160 && mouseY > height - 70) || (mouseX < 100 && mouseY < 60)) return;
+
   if (mode === 2) addMomoText(mouseX, mouseY);
     if (introShown) {
     introShown = false;
