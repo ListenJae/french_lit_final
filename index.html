@@ -41,8 +41,80 @@
 </div>
 <script>
 let mode = 0;
-let fonts = ["Courier Prime", "Special Elite", "Nanum Myeongjo", "Patrick Hand"];
-let quotes = [[
+let fonts = ["'Courier Prime', monospace", "'Special Elite', cursive", "'Nanum Myeongjo', serif", "'Patrick Hand', cursive"];
+let quotes = [
+  [
+    "Aujourd'hui, maman est morte.",
+    "J'ai tiré à cause du soleil.",
+    "Je me sentais heureux.",
+    "Tous les hommes meurent. C’est la seule certitude.",
+    "Je ne voudrais pas revivre ma vie.",
+    "Je ne ressentais rien. Et c'était cela le problème.",
+    "Le monde ne me comprenait pas.",
+    "Au tribunal, l’attitude comptait plus que la vérité.",
+    "J’ai répondu par le silence.",
+    "Le temps semblait s’être arrêté.",
+    "Je ne crois pas en Dieu.",
+    "La mort vient à tout le monde.",
+    "Je ne cache pas mes émotions.",
+    "Je n’attendais rien.",
+    "Ce monde m’était étranger.",
+    "J’ai tout accepté.",
+    "Il faut vivre tant qu’on est vivant.",
+    "Même la vie en prison devient une habitude.",
+    "J’étais fatigué de l’ambiance mécanique du tribunal.",
+    "Je crois que seul le moment présent compte."
+  ],
+  [
+    "Allons-y ? Oui, allons-y.\n\n\nIls ne bougent pas."
+  ],
+  [
+    "Momo était l'enfant le plus seul du monde.",
+    "On existe quand on se sent aimé.",
+    "Madame Rosa a respiré profondément.",
+    "Le monde était parfois doux, parfois trop cruel.",
+    "Ce jour-là, j’ai eu l’impression de devenir adulte.",
+    "La mort était toujours proche.",
+    "Je trouvais le sens plus important que le nom.",
+    "Le regard de Madame Rosa était chaleureux.",
+    "L’amour était compliqué et douloureux.",
+    "Nous avons tous des vérités cachées.",
+    "La pauvreté était une évidence pour moi.",
+    "J’ai grandi dans l’ignorance.",
+    "Madame Rosa était tout pour moi.",
+    "Le monde était plein de choses incompréhensibles.",
+    "Les adultes ne m’écoutaient pas.",
+    "J’avais beaucoup de sentiments inexpliqués.",
+    "La vie était faite de choix constants.",
+    "J’essayais de comprendre le monde avec un cœur d’enfant.",
+    "Je croyais qu’un jour je connaîtrais la vérité.",
+    "L’amour me donnait le droit d’exister."
+  ],
+  [
+    "Ce qui est important est invisible pour les yeux.",
+    "Apprivoiser, c’est créer des liens.",
+    "Tu es responsable de ta rose parce que tu lui as donné de ton temps.",
+    "Les grandes personnes aiment les chiffres.",
+    "Le renard a dit : C’est un secret très simple.",
+    "Le Petit Prince regardait les étoiles et pensait.",
+    "Je dois rentrer chez moi.",
+    "Tu dois être responsable de ce que tu apprivoises.",
+    "Le désert est beau parce qu’il cache un puits quelque part.",
+    "Le Petit Prince a souri doucement.",
+    "Je dois retourner à mon étoile.",
+    "L’amour ne se voit pas avec les yeux mais avec le cœur.",
+    "Même après mon départ, tu pourras penser à moi.",
+    "La rose était fière mais voulait être aimée.",
+    "Je n’oublierai jamais ce que le renard m’a dit.",
+    "Les étoiles riaient en silence.",
+    "Je me sentais stupide mais heureux.",
+    "La vraie beauté est invisible.",
+    "Le Petit Prince a appris beaucoup sur la Terre.",
+    "Comme tu as trouvé ton puits, je dois trouver ma voie."
+  ]
+];
+let translations = [
+  [
     "나는 어머니가 죽었다는 소식을 들었다.",
     "나는 태양 때문에 쏘았다.",
     "나는 행복하다고 느꼈다.",
@@ -65,7 +137,7 @@ let quotes = [[
     "나는 지금 이 순간이 전부라고 믿는다."
   ],
   [
-    "자, 우리 갈까?\n그래, 우리 가세.\n\n\n그들은 움직이지 않는다."
+    "자, 우리 갈까? 그래, 우리 가세. 하지만 그들은 움직이지 않는다."
   ],
   [
     "모모는 세상에서 가장 외로운 아이였다.",
@@ -111,7 +183,7 @@ let quotes = [[
     "어린 왕자는 지구에서 많은 걸 배웠어.",
     "네가 우물을 찾았듯, 나도 내 길을 찾아야 해."
   ]
-];
+]; // 해석도 함께 표시될 배열 필요
 let currentQuoteIndex = 0;
 let displayedText = "";
 let textProgress = 0;
@@ -139,7 +211,7 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
   textAlign(CENTER, CENTER);
-  textSize(28);
+  textSize(36);
   fill(30);
   noStroke();
   textFont(fonts[mode]);
@@ -173,11 +245,11 @@ function draw() {
     displayedText = quotes[mode][currentQuoteIndex].substring(0, textProgress);
     if (typeSound && !typeSound.isPlaying()) typeSound.play();
   }
-  text(displayedText, width / 2, height / 2);
-
-  if (mode === 1) {
-    textSize(16);
-    text("…", width / 2, height / 2 + 40);
+  textSize(36);
+  text(displayedText, width / 2, height / 2 - 20);
+  if (textProgress >= quotes[mode][currentQuoteIndex].length && translations[mode]) {
+    textSize(20);
+    text(translations[mode][currentQuoteIndex], width / 2, height / 2 + 40);
   }
 }
 
