@@ -249,7 +249,11 @@ function draw() {
     textProgress++;
     lastTypedTime = now;
     displayedText = quotes[mode][currentQuoteIndex].substring(0, textProgress);
-    if (typeSound && !typeSound.isPlaying()) typeSound.play();
+    if (typeSound) {
+  if (!typeSound.isPlaying()) typeSound.play();
+} else if (typeSound && typeSound.isPlaying()) {
+  typeSound.stop();
+}
   }
 
   textSize(36);
@@ -330,6 +334,7 @@ function handleButtonClick(index) {
 }
 
 function changeMode(index) {
+  if (index === 0) bulletHoles = [];
   stopAllSounds();
   mode = index;
   currentQuoteIndex = 0;
