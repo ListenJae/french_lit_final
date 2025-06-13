@@ -18,7 +18,7 @@
       gap: 10px;
       z-index: 10;
     }
-    .buttons button, .toggle-lang, .desc-button {
+    .buttons button, .toggle-lang, .desc-button, .home-button {
       padding: 10px 20px;
       font-size: 16px;
       border: none;
@@ -27,7 +27,7 @@
       cursor: pointer;
       border-radius: 5px;
     }
-    .buttons button:hover, .toggle-lang:hover, .desc-button:hover {
+    .buttons button:hover, .toggle-lang:hover, .desc-button:hover, .home-button:hover {
       background-color: #666;
     }
     .toggle-lang {
@@ -40,6 +40,14 @@
       position: fixed;
       bottom: 20px;
       left: 20px;
+      z-index: 10;
+    }
+    .home-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      padding: 6px 14px;
+      font-size: 14px;
       z-index: 10;
     }
     .description-box {
@@ -240,6 +248,12 @@ function preload() {
 
 let introShown = true;
 let showDescription = false;
+function returnToHome() {
+  stopAllSounds();
+  introShown = true;
+  showDescription = false;
+}
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
   textAlign(CENTER, CENTER);
@@ -392,7 +406,7 @@ function mousePressed() {
     updateQuote();
     return;
   }
-  if (mouseY < 70 || (mouseX > width - 140 && mouseY > height - 60) || (mouseX < 160 && mouseY > height - 70)) return;
+  if (mouseY < 70 || (mouseX > width - 140 && mouseY > height - 60) || (mouseX < 160 && mouseY > height - 70) || (mouseX < 100 && mouseY < 60)) return;
   if (mode === 0) {
     bulletHoles.push({ x: mouseX, y: mouseY });
     if (gunshot) gunshot.play();
@@ -406,6 +420,15 @@ function mousePressed() {
 }
 </script>
 <button class="desc-button" onclick="showDescription = !showDescription">프로젝트 설명</button>
+<div id="descBox" class="description-box" style="display: none;">
+  이 프로젝트는 프랑스 현대문학의 형식과 장르 실험을 주제로,
+  네 작품(이방인, 고도를 기다리며, 자기 앞의 생, 어린 왕자)을
+  감각적으로 체험할 수 있도록 구성된 인터랙티브 문학 작품입니다.
+  <br/><br/>각 작품의 정서와 상징을 시각/청각적으로 재해석하며,
+  사용자 클릭을 통해 인용문과 그 의미를 순차적으로 감상할 수 있습니다.
+</div>
+<button class="desc-button" onclick="showDescription = !showDescription">프로젝트 설명</button>
+<button class="home-button" onclick="returnToHome()">홈</button>
 <div id="descBox" class="description-box" style="display: none;">
   이 프로젝트는 프랑스 현대문학의 형식과 장르 실험을 주제로,
   네 작품(이방인, 고도를 기다리며, 자기 앞의 생, 어린 왕자)을
