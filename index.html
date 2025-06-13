@@ -430,18 +430,6 @@ function addMomoNote() {
   });
 }
 
-function drawMomoNotes() {
-  textFont("Patrick Hand");
-  textSize(16);
-  for (let i = momoNotes.length - 1; i >= 0; i--) {
-    let note = momoNotes[i];
-    fill(255, note.alpha);
-    text(note.text, note.x, note.y);
-    note.alpha -= 1;
-    if (note.alpha <= 0) momoNotes.splice(i, 1);
-  }
-}
-
 function handleButtonClick(index) {
   changeMode(index);
 }
