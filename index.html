@@ -63,7 +63,7 @@ let quotes = [[
     "나는 지금 이 순간이 전부라고 믿는다."
   ],
   [
-    "기다리자. 아무 일도 일어나지 않는다."
+    "자, 우리 갈까?\n그래, 우리 가세.\n\n\n그들은 움직이지 않는다."
   ],
   [
     "모모는 세상에서 가장 외로운 아이였다.",
@@ -165,11 +165,6 @@ function draw() {
     displayedText = quotes[mode][currentQuoteIndex].substring(0, textProgress);
   }
   text(displayedText, width / 2, height / 2);
-
-  if (mode === 1) {
-    textSize(16);
-    text("…", width / 2, height / 2 + 40);
-  }
 }
 
 function updateQuote() {
