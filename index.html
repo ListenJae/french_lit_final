@@ -206,7 +206,7 @@ let bgColors = ["#c0c0c0", "#f2f2f2", "#ffeedb", "#d1e8e2"];
 let starX = [], starY = [], starAlpha = [];
 let clickStars = [];
 let bulletHoles = [];
-let sounds = [], gunshot, typeSound;
+let sounds = [], gunshot;
 
 function preload() {
   soundFormats('mp3');
@@ -215,7 +215,7 @@ function preload() {
   sounds[2] = loadSound('momo.mp3');
   sounds[3] = loadSound('prince.mp3');
   gunshot = loadSound('gunshot.mp3');
-  typeSound = loadSound('type.mp3');
+  
 }
 
 function setup() {
@@ -250,13 +250,8 @@ function draw() {
   textProgress++;
   lastTypedTime = now;
   displayedText = quotes[mode][currentQuoteIndex].substring(0, textProgress);
-  if (typeSound && !typeSound.isPlaying()) {
-    typeSound.setVolume(1.0);
-    typeSound.play();
-  }
-} else if (textProgress >= quotes[mode][currentQuoteIndex].length && typeSound && typeSound.isPlaying()) {
-  typeSound.stop();
-}
+  
+} else 
 
   textSize(36);
   text(displayedText, width / 2, height / 2 - 40);
@@ -329,7 +324,7 @@ function drawStar(x, y, radius1, radius2, npoints) {
 
 function stopAllSounds() {
   for (let s of sounds) if (s && s.isPlaying()) s.stop();
-  if (typeSound && typeSound.isPlaying()) typeSound.stop();
+  
   if (gunshot && gunshot.isPlaying()) gunshot.stop();
 }
 
