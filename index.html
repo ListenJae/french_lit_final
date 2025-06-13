@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Click to Nowhere</title>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
+  <style>
+    body { margin: 0; font-family: 'Georgia', serif; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+<script>
+let mode = 0;
+let messages = [
+  "이방인: 나는 어머니가 죽었다는 소식을 들었다.",
+  "고도: 기다리자. 아무 일도 일어나지 않는다.",
+  "자기 앞의 생: 모모는 세상에서 가장 외로운 아이였다.",
+  "어린 왕자: 중요한 것은 눈에 보이지 않아."
+];
+let bgColors = ["#c0c0c0", "#f2f2f2", "#ffeedb", "#d1e8e2"];
+let starX = [], starY = [], starAlpha = [];
+let sounds = [];
+
+function preload() {
+  soundFormats('mp3');
+  sounds[0] = loadSound('meursault.mp3');
+  sounds[1] = loadSound('waiting.mp3');
+  sounds[2] = loadSound('momo.mp3');
+  sounds[3] = loadSound('prince.mp3');
+}
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  textAlign(CENTER, CENTER);
+  textSize(28);
+  fill(30);
+  noStroke();
+
+  for (let i = 0; i < 100; i++) {
+    starX.push(random(width));
+    starY.push(random(height));
+    starAlpha.push(random(50, 255));
+  }
+}
+
+function draw() {
+  background(bgColors[mode]);
+
+  if (mode === 3) {
+    drawStars();
+  }
+
+  fill(30);
+  text(messages[mode], width / 2, height / 2);
+
+  if (mode === 1) {
+    textSize(16);
+    text("…", width / 2, height / 2 + 40);
+  }
+}
+
+function drawStars() {
+  for (let i = 0; i < starX.length; i++) {
+    fill(255, 255, 255, starAlpha[i]);
+    circle(starX[i], starY[i], 2);
+    starAlpha[i] += random(-2, 2);
+    starAlpha[i] = constrain(starAlpha[i], 50, 255);
+  }
+}
+
+function mousePressed() {
+  if (sounds[mode] && sounds[mode].isPlaying()) {
+    sounds[mode].stop();
+  }
+  mode = (mode + 1) % messages.length;
+  if (sounds[mode]) {
+    sounds[mode].play();
+  }
+}
+</script>
+</body>
+</html>
