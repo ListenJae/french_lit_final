@@ -383,7 +383,6 @@ function stopAllSounds() {
 function drawMomoNotes() {
   textFont("Patrick Hand");
   textSize(14);
-  addMomoNote();
   for (let i = momoNotes.length - 1; i >= 0; i--) {
     let note = momoNotes[i];
     let w = textWidth(note.text) + 20;
@@ -397,7 +396,6 @@ function drawMomoNotes() {
     if (note.alpha <= 0) momoNotes.splice(i, 1);
   }
 }
-
 
 function addMomoNote() {
   const texts = [
@@ -452,7 +450,6 @@ function toggleLanguage() {
 }
 
 function mousePressed() {
-  if (mode === 2) addMomoNote();
   if (mode === 2) addMomoNote();
   if (introShown) {
     introShown = false;
