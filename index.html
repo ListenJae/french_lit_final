@@ -247,11 +247,16 @@ function draw() {
   let now = millis();
 
   if (textProgress < quotes[mode][currentQuoteIndex].length && now - lastTypedTime > typingSpeed) {
-    textProgress++;
-    lastTypedTime = now;
-    displayedText = quotes[mode][currentQuoteIndex].substring(0, textProgress);
-    if (typeSound && !typeSound.isPlaying()) typeSound.setVolume(1.0); typeSound.play();
+  textProgress++;
+  lastTypedTime = now;
+  displayedText = quotes[mode][currentQuoteIndex].substring(0, textProgress);
+  if (typeSound && !typeSound.isPlaying()) {
+    typeSound.setVolume(1.0);
+    typeSound.play();
   }
+} else if (textProgress >= quotes[mode][currentQuoteIndex].length && typeSound && typeSound.isPlaying()) {
+  typeSound.stop();
+}
 
   textSize(36);
   text(displayedText, width / 2, height / 2 - 40);
@@ -324,6 +329,8 @@ function drawStar(x, y, radius1, radius2, npoints) {
 
 function stopAllSounds() {
   for (let s of sounds) if (s && s.isPlaying()) s.stop();
+  if (typeSound && typeSound.isPlaying()) typeSound.stop();
+  if (gunshot && gunshot.isPlaying()) gunshot.stop();
 }
 
 function handleButtonClick(index) {
