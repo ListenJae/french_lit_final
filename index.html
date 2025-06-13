@@ -40,12 +40,83 @@
 </div>
 <script>
 let mode = 0;
-let messages = [
-  "이방인: 나는 어머니가 죽었다는 소식을 들었다.",
-  "고도: 기다리자. 아무 일도 일어나지 않는다.",
-  "자기 앞의 생: 모모는 세상에서 가장 외로운 아이였다.",
-  "어린 왕자: 중요한 것은 눈에 보이지 않아."
+let quotes = [
+  [
+    "나는 어머니가 죽었다는 소식을 들었다.",
+    "나는 태양 때문에 쏘았다.",
+    "나는 행복하다고 느꼈다.",
+    "인간은 모두 죽는다. 그것만은 확실하다.",
+    "나는 내 인생을 다시 살고 싶지 않다.",
+    "나는 아무것도 느끼지 않았다. 그리고 그것이 문제였다.",
+    "세상은 나를 이해하지 못했다.",
+    "법정에서는 진실보다 태도가 중요했다.",
+    "나는 침묵으로 대답했다.",
+    "시간이 멈춘 듯했다.",
+    "나는 신을 믿지 않는다.",
+    "죽음은 누구에게나 온다.",
+    "나는 내 감정을 숨기지 않는다.",
+    "나는 아무것도 기대하지 않았다.",
+    "이 세상은 나에게 낯설었다.",
+    "나는 모든 것을 받아들였다.",
+    "살아 있는 동안은 살아야 한다.",
+    "감옥의 삶도 결국 익숙해진다.",
+    "나는 재판정의 기계적 분위기에 질렸다.",
+    "나는 지금 이 순간이 전부라고 믿는다."
+  ],
+  [
+    "기다리자. 아무 일도 일어나지 않는다."
+  ],
+  [
+    "모모는 세상에서 가장 외로운 아이였다.",
+    "사람은 사랑을 받는다고 느낄 때 존재하는 거야.",
+    "로자 아줌마는 숨을 깊이 들이쉬었다.",
+    "세상은 때때로 부드러웠고, 때때로 너무 잔인했다.",
+    "나는 그날 처음으로 어른이 된 것 같았다.",
+    "죽음은 언제나 가까이에 있었다.",
+    "나는 이름보다 의미를 더 중요하게 생각했다.",
+    "로자 아줌마의 눈빛은 따뜻했다.",
+    "사랑은 복잡하고 아픈 것이었다.",
+    "우리 모두는 숨기고 있는 진실이 있다.",
+    "가난은 내게 당연한 것이었다.",
+    "나는 무지 속에서 자랐다.",
+    "로자 아줌마는 나의 전부였다.",
+    "세상은 이해할 수 없는 일들로 가득했다.",
+    "어른들은 내 말을 듣지 않았다.",
+    "나에게는 설명할 수 없는 감정이 많았다.",
+    "삶은 늘 선택의 연속이었다.",
+    "어린 마음으로 세상을 이해하려 했다.",
+    "나는 언젠가 진실을 알게 될 거라 믿었다.",
+    "사랑은 나를 존재하게 만들었다."
+  ],
+  [
+    "중요한 것은 눈에 보이지 않아.",
+    "길들인다는 건 관계를 맺는다는 거야.",
+    "네가 네 장미를 소중히 여기는 건, 네가 그 장미에게 시간을 들였기 때문이야.",
+    "어른들은 숫자를 좋아해.",
+    "여우는 떠나면서 말했다. 그건 아주 단순한 비밀이야.",
+    "어린 왕자는 별을 바라보며 생각했다.",
+    "나는 집으로 돌아가야 해.",
+    "네가 길들인 것에 대해선 끝까지 책임져야 해.",
+    "사막이 아름다운 건 어딘가에 우물이 숨어 있기 때문이야.",
+    "어린 왕자는 작은 웃음을 지었다.",
+    "나는 내 별로 돌아가야 해.",
+    "사랑은 눈으로 보이지 않고 마음으로 느껴야 해.",
+    "내가 떠난 후에도 넌 나를 기억할 수 있어.",
+    "장미는 자존심이 셌지만 사랑받고 싶어했어.",
+    "여우와의 대화는 잊을 수 없어.",
+    "별들은 침묵 속에서 웃고 있었어.",
+    "나는 바보처럼 느껴졌지만 행복했어.",
+    "진짜 아름다움은 눈에 보이지 않아.",
+    "어린 왕자는 지구에서 많은 걸 배웠어.",
+    "네가 우물을 찾았듯, 나도 내 길을 찾아야 해."
+  ]
 ];
+let currentQuoteIndex = 0;
+let displayedText = "";
+let textProgress = 0;
+let lastTypedTime = 0;
+let typingSpeed = 40;
+
 let bgColors = ["#c0c0c0", "#f2f2f2", "#ffeedb", "#d1e8e2"];
 let starX = [], starY = [], starAlpha = [];
 let clickStars = [];
@@ -58,7 +129,7 @@ function preload() {
   sounds[1] = loadSound('waiting.mp3');
   sounds[2] = loadSound('momo.mp3');
   sounds[3] = loadSound('prince.mp3');
-  gunshot = loadSound('gunshot.mp3'); // 총소리 추가
+  gunshot = loadSound('gunshot.mp3');
 }
 
 function setup() {
@@ -73,6 +144,7 @@ function setup() {
     starY.push(random(height));
     starAlpha.push(random(50, 255));
   }
+  updateQuote();
 }
 
 function draw() {
@@ -80,7 +152,7 @@ function draw() {
 
   if (mode === 3) {
     drawStars();
-    drawClickStars();
+    updateClickStars();
   }
 
   if (mode === 0) {
@@ -88,12 +160,24 @@ function draw() {
   }
 
   fill(30);
-  text(messages[mode], width / 2, height / 2);
+  let now = millis();
+  if (textProgress < quotes[mode][currentQuoteIndex].length && now - lastTypedTime > typingSpeed) {
+    textProgress++;
+    lastTypedTime = now;
+    displayedText = quotes[mode][currentQuoteIndex].substring(0, textProgress);
+  }
+  text(displayedText, width / 2, height / 2);
 
   if (mode === 1) {
     textSize(16);
     text("…", width / 2, height / 2 + 40);
   }
+}
+
+function updateQuote() {
+  textProgress = 0;
+  displayedText = "";
+  lastTypedTime = millis();
 }
 
 function drawStars() {
@@ -105,19 +189,24 @@ function drawStars() {
   }
 }
 
-function drawClickStars() {
-  for (let s of clickStars) {
-    fill(255, 255, 0, 200);
-    star(s.x, s.y, 5, 12, 5);
+function updateClickStars() {
+  for (let i = clickStars.length - 1; i >= 0; i--) {
+    let s = clickStars[i];
+    fill(255, 255, 0, s.alpha);
+    star(s.x, s.y, 6, 14, 5);
+    s.alpha -= 2;
+    if (s.alpha <= 0) {
+      clickStars.splice(i, 1);
+    }
   }
 }
 
 function drawBulletHoles() {
   for (let b of bulletHoles) {
     fill(50);
-    circle(b.x, b.y, 15);
+    circle(b.x, b.y, 30);
     fill(0);
-    circle(b.x, b.y, 6);
+    circle(b.x, b.y, 10);
   }
 }
 
@@ -145,6 +234,8 @@ function stopAllSounds() {
 function changeMode(index) {
   stopAllSounds();
   mode = index;
+  currentQuoteIndex = 0;
+  updateQuote();
   if (sounds[mode]) {
     sounds[mode].loop();
   }
@@ -155,7 +246,12 @@ function mousePressed() {
     bulletHoles.push({ x: mouseX, y: mouseY });
     if (gunshot) gunshot.play();
   } else if (mode === 3) {
-    clickStars.push({ x: mouseX, y: mouseY });
+    clickStars.push({ x: mouseX, y: mouseY, alpha: 255 });
+  }
+
+  if (mode !== 1) {
+    currentQuoteIndex = (currentQuoteIndex + 1) % quotes[mode].length;
+    updateQuote();
   }
 }
 </script>
