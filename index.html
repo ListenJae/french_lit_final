@@ -7,7 +7,7 @@
   <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/addons/p5.sound.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime&family=Nanum+Myeongjo&family=Patrick+Hand&display=swap" rel="stylesheet">
   <style>
-    body { margin: 0; background: #000; color: white; }
+    body { margin: 0; background: #000; color: white; font-family: sans-serif; }
     canvas { display: block; }
     .buttons {
       position: fixed;
@@ -18,7 +18,7 @@
       gap: 10px;
       z-index: 10;
     }
-    .buttons button {
+    .buttons button, .toggle-lang {
       padding: 10px 20px;
       font-size: 16px;
       border: none;
@@ -27,8 +27,14 @@
       cursor: pointer;
       border-radius: 5px;
     }
-    .buttons button:hover {
+    .buttons button:hover, .toggle-lang:hover {
       background-color: #666;
+    }
+    .toggle-lang {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 10;
     }
   </style>
 </head>
@@ -39,6 +45,7 @@
   <button onclick="handleButtonClick(2)">자기 앞의 생</button>
   <button onclick="handleButtonClick(3)">어린 왕자</button>
 </div>
+<button class="toggle-lang" onclick="toggleLanguage()">언어 전환</button>
 <script>
 let mode = 0;
 let fonts = ["'Courier Prime', monospace", "'Special Elite', cursive", "'Nanum Myeongjo', serif", "'Patrick Hand', cursive"];
@@ -183,14 +190,16 @@ let translations = [
     "어린 왕자는 지구에서 많은 걸 배웠어.",
     "네가 우물을 찾았듯, 나도 내 길을 찾아야 해."
   ]
-]; // 해석도 함께 표시될 배열 필요
+];
 let currentQuoteIndex = 0;
 let displayedText = "";
 let textProgress = 0;
 let lastTypedTime = 0;
 let typingSpeed = 40;
 let textStartTime = 0;
-let requiredDelay = 5000;
+let requiredDelay = 1000;
+let showTranslation = true;
+let translationAlpha = 0;
 
 let bgColors = ["#c0c0c0", "#f2f2f2", "#ffeedb", "#d1e8e2"];
 let starX = [], starY = [], starAlpha = [];
@@ -212,7 +221,6 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   textAlign(CENTER, CENTER);
   textSize(36);
-  fill(30);
   noStroke();
   textFont(fonts[mode]);
 
@@ -231,24 +239,27 @@ function draw() {
     drawStars();
     updateClickStars();
   }
-
-  if (mode === 0) {
-    drawBulletHoles();
-  }
+  if (mode === 0) drawBulletHoles();
 
   fill(30);
   textFont(fonts[mode]);
   let now = millis();
+
   if (textProgress < quotes[mode][currentQuoteIndex].length && now - lastTypedTime > typingSpeed) {
     textProgress++;
     lastTypedTime = now;
     displayedText = quotes[mode][currentQuoteIndex].substring(0, textProgress);
     if (typeSound && !typeSound.isPlaying()) typeSound.play();
   }
+
   textSize(36);
-  text(displayedText, width / 2, height / 2 - 20);
-  if (textProgress >= quotes[mode][currentQuoteIndex].length && translations[mode]) {
+  text(displayedText, width / 2, height / 2 - 40);
+
+  if (textProgress >= quotes[mode][currentQuoteIndex].length && showTranslation && translations[mode]) {
+    if (translationAlpha < 255) translationAlpha += 5;
+    fill(30, translationAlpha);
     textSize(20);
+    textFont("Nanum Myeongjo");
     text(translations[mode][currentQuoteIndex], width / 2, height / 2 + 40);
   }
 }
@@ -258,6 +269,7 @@ function updateQuote() {
   displayedText = "";
   lastTypedTime = millis();
   textStartTime = millis();
+  translationAlpha = 0;
 }
 
 function drawStars() {
@@ -310,9 +322,7 @@ function drawStar(x, y, radius1, radius2, npoints) {
 }
 
 function stopAllSounds() {
-  for (let s of sounds) {
-    if (s && s.isPlaying()) s.stop();
-  }
+  for (let s of sounds) if (s && s.isPlaying()) s.stop();
 }
 
 function handleButtonClick(index) {
@@ -331,17 +341,19 @@ function changeMode(index) {
   }
 }
 
+function toggleLanguage() {
+  showTranslation = !showTranslation;
+}
+
 function mousePressed() {
   if (mouseY < 70) return;
-
   if (mode === 0) {
     bulletHoles.push({ x: mouseX, y: mouseY });
     if (gunshot) gunshot.play();
   } else if (mode === 3) {
     clickStars.push({ x: mouseX, y: mouseY, alpha: 255 });
   }
-
-  if (mode !== 1 && textProgress >= quotes[mode][currentQuoteIndex].length && millis() - textStartTime > 5000) {
+  if (mode !== 1 && textProgress >= quotes[mode][currentQuoteIndex].length && millis() - textStartTime > requiredDelay) {
     currentQuoteIndex = (currentQuoteIndex + 1) % quotes[mode].length;
     updateQuote();
   }
