@@ -6,11 +6,38 @@
   <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/addons/p5.sound.min.js"></script>
   <style>
-    body { margin: 0; font-family: 'Georgia', serif; }
+    body { margin: 0; font-family: 'Georgia', serif; background: #000; color: white; }
     canvas { display: block; }
+    .buttons {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 10;
+    }
+    .buttons button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      background-color: #444;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .buttons button:hover {
+      background-color: #666;
+    }
   </style>
 </head>
 <body>
+<div class="buttons">
+  <button onclick="changeMode(0)">이방인</button>
+  <button onclick="changeMode(1)">고도</button>
+  <button onclick="changeMode(2)">자기 앞의 생</button>
+  <button onclick="changeMode(3)">어린 왕자</button>
+</div>
 <script>
 let mode = 0;
 let messages = [
@@ -70,13 +97,17 @@ function drawStars() {
   }
 }
 
-function mousePressed() {
-  if (sounds[mode] && sounds[mode].isPlaying()) {
-    sounds[mode].stop();
+function stopAllSounds() {
+  for (let s of sounds) {
+    if (s && s.isPlaying()) s.stop();
   }
-  mode = (mode + 1) % messages.length;
+}
+
+function changeMode(index) {
+  stopAllSounds();
+  mode = index;
   if (sounds[mode]) {
-    sounds[mode].play();
+    sounds[mode].loop();
   }
 }
 </script>
