@@ -40,8 +40,7 @@
 </div>
 <script>
 let mode = 0;
-let quotes = [
-  [
+let quotes = [[
     "나는 어머니가 죽었다는 소식을 들었다.",
     "나는 태양 때문에 쏘았다.",
     "나는 행복하다고 느꼈다.",
@@ -109,8 +108,7 @@ let quotes = [
     "진짜 아름다움은 눈에 보이지 않아.",
     "어린 왕자는 지구에서 많은 걸 배웠어.",
     "네가 우물을 찾았듯, 나도 내 길을 찾아야 해."
-  ]
-];
+  ]]; // 이전 코드에서 발췌문 20개씩 설정된 배열 그대로 유지
 let currentQuoteIndex = 0;
 let displayedText = "";
 let textProgress = 0;
@@ -192,8 +190,12 @@ function drawStars() {
 function updateClickStars() {
   for (let i = clickStars.length - 1; i >= 0; i--) {
     let s = clickStars[i];
+    push();
+    translate(s.x, s.y);
+    rotate(radians(frameCount + i * 10));
     fill(255, 255, 0, s.alpha);
-    star(s.x, s.y, 6, 14, 5);
+    drawStar(0, 0, 20, 50, 5);
+    pop();
     s.alpha -= 2;
     if (s.alpha <= 0) {
       clickStars.splice(i, 1);
@@ -204,13 +206,13 @@ function updateClickStars() {
 function drawBulletHoles() {
   for (let b of bulletHoles) {
     fill(50);
-    circle(b.x, b.y, 30);
+    circle(b.x, b.y, 60);
     fill(0);
-    circle(b.x, b.y, 10);
+    circle(b.x, b.y, 20);
   }
 }
 
-function star(x, y, radius1, radius2, npoints) {
+function drawStar(x, y, radius1, radius2, npoints) {
   let angle = TWO_PI / npoints;
   let halfAngle = angle / 2.0;
   beginShape();
