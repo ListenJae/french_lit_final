@@ -257,7 +257,8 @@ function applyModeEffect() {
       filter(GRAY);
       break;
     case 1:
-      filter(WHITE);
+      filter(GRAY);
+      filter(BLUR,2)
       filter(BLUR,2);
       break;
     case 2:
