@@ -453,12 +453,21 @@ function handleButtonClick(index) {
 }
 
 function changeMode(index) {
-  if (index === 0) bulletHoles = [];
-  stopAllSounds();
-  mode = index;
-  currentQuoteIndex = 0;
-  updateQuote();
-  textFont(fonts[mode]);
+  stopAllSounds();          // 모든 소리 정지
+  mode = index;             // 모드 변경
+  currentQuoteIndex = 0;    // 인용문 인덱스 초기화
+  updateQuote();            // 텍스트 초기화
+  textFont(fonts[mode]);    // 폰트 적용
+
+  // 시각 효과 리셋
+  bulletHoles = [];
+  clickStars = [];
+  momoNotes = [];
+
+  // 배경 필터 초기화 (필요시 tint, filter 등도 재설정)
+  clear(); // 이전 렌더 제거 (p5에서는 자동으로 draw에서 background로 커버되지만 안전장치)
+
+  // 배경 음악 재생
   if (sounds[mode]) {
     sounds[mode].setVolume(1.0);
     sounds[mode].loop();
