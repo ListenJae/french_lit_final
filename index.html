@@ -230,10 +230,11 @@ let requiredDelay = 1000;
 let showTranslation = true;
 let translationAlpha = 0;
 
-let bgColors = ["#c0c0c0", "#f2f2f2", "#ffeedb", "#d1e8e2"];
+let bgImages = [];
 let starX = [], starY = [], starAlpha = [];
 let clickStars = [];
 let bulletHoles = [];
+let momoNotes = [];
 let sounds = [], gunshot;
 
 function preload() {
@@ -243,7 +244,28 @@ function preload() {
   sounds[2] = loadSound('momo.mp3');
   sounds[3] = loadSound('prince.mp3');
   gunshot = loadSound('gunshot.mp3');
-  
+
+  bgImages[0] = loadImage('assets/etranger_bg.jpg');
+  bgImages[1] = loadImage('assets/godot_bg.jpg');
+  bgImages[2] = loadImage('assets/momo_bg.jpg');
+  bgImages[3] = loadImage('assets/prince_bg.jpg');
+}
+
+function applyModeEffect() {
+  switch (mode) {
+    case 0:
+      filter(GRAY);
+      break;
+    case 1:
+      filter(BLUR, 1);
+      break;
+    case 2:
+      tint(255, 240, 200, 220);
+      break;
+    case 3:
+      tint(255, 255, 220, 240);
+      break;
+  }
 }
 
 let introShown = true;
@@ -270,7 +292,8 @@ function setup() {
 }
 
 function draw() {
-    document.getElementById("descBox").style.display = showDescription ? "block" : "none";
+  if (mode === 2) drawMomoNotes();
+  document.getElementById("descBox").style.display = showDescription ? "block" : "none";
 
   if (introShown) {
     background(0);
@@ -285,25 +308,29 @@ function draw() {
     text("화면을 클릭하면 시작합니다.", width / 2, height / 2 + 100);
     return;
   }
-  background(bgColors[mode]);
 
+  // 배경 이미지와 효과 적용
+  image(bgImages[mode], 0, 0, width, height);
+  applyModeEffect();
+
+  // 모드별 시각 효과
   if (mode === 3) {
     drawStars();
     updateClickStars();
   }
   if (mode === 0) drawBulletHoles();
-  if (mode === 2) drawMomoTexts();
 
+  // 텍스트 출력
   fill(30);
   textFont(fonts[mode]);
+  textAlign(CENTER, CENTER);
   let now = millis();
 
   if (textProgress < quotes[mode][currentQuoteIndex].length && now - lastTypedTime > typingSpeed) {
-  textProgress++;
-  lastTypedTime = now;
-  displayedText = quotes[mode][currentQuoteIndex].substring(0, textProgress);
-  
-} else 
+    textProgress++;
+    lastTypedTime = now;
+    displayedText = quotes[mode][currentQuoteIndex].substring(0, textProgress);
+  }
 
   textSize(36);
   text(displayedText, width / 2, height / 2 - 40);
@@ -316,7 +343,6 @@ function draw() {
     text(translations[mode][currentQuoteIndex], width / 2, height / 2 + 40);
   }
 }
-
 function updateQuote() {
   textProgress = 0;
   displayedText = "";
