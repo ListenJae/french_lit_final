@@ -257,13 +257,13 @@ function applyModeEffect() {
       filter(GRAY);
       break;
     case 1:
-      filter(BLUR, 1);
+      tint(255, 255, 220, 240);
       break;
     case 2:
       tint(255, 240, 200, 220);
       break;
     case 3:
-      tint(255, 255, 220, 240);
+      filter(GRAY);
       break;
   }
 }
