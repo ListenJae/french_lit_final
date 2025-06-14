@@ -257,9 +257,12 @@ function applyModeEffect() {
       filter(GRAY);
       break;
     case 1:
-      tint(255, 255, 220, 240);
+      filter(GRAY);
+      filter(BLUR,2);
       break;
     case 2:
+      tint(255, 255, 220, 240);
+      filter(BLUR,2);
       break;
     case 3:
       break;
