@@ -320,7 +320,7 @@ function draw() {
   }
   if (mode === 0) drawBulletHoles();
   if (mode === 2) drawMomoTexts();
-
+  fill(mode === 1 ? color(255, translationAlpha) : color(30, translationAlpha));
   // 텍스트 출력
   fill(30);
   textFont(fonts[mode]);
