@@ -254,20 +254,14 @@ function preload() {
 function applyModeEffect() {
   switch (mode) {
     case 0:
-      filter(BLUR, 2);
       filter(GRAY);
       break;
     case 1:
-      filter(BLUR, 2);
       tint(255, 255, 220, 240);
       break;
     case 2:
-      filter(BLUR, 2);
-
-      tint(255, 240, 200, 220);
       break;
     case 3:
-      filter(GRAY);
       break;
   }
 }
@@ -296,7 +290,6 @@ function setup() {
 }
 
 function draw() {
-  if (mode === 2) drawMomoTexts();
   document.getElementById("descBox").style.display = showDescription ? "block" : "none";
 
   if (introShown) {
@@ -323,6 +316,7 @@ function draw() {
     updateClickStars();
   }
   if (mode === 0) drawBulletHoles();
+  if (mode === 2) drawMomoTexts();
 
   // 텍스트 출력
   fill(30);
